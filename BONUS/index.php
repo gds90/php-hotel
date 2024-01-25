@@ -40,8 +40,10 @@ $hotels = [
 // dichiaro la variabile parking vuota per evitare errori nella visualizzazione della select
 $parking = '';
 
+// dichiaro la variabile vote vuota per evitare errori nella visualizzazione della select
+$vote = '';
 
-// dichiaro una variabile filtered_hotels a cui associo i valori dell'array hotels per evitare errori nella visualizzazione della tabella;
+// dichiaro una variabile filtered_hotels a cui associo i valori dell'array hotels per evitare errori nella visualizzazione della tabella iniziale;
 $filtered_hotels = $hotels;
 
 // controllo se è stato selezionato un filtro per gli hotel con parcheggio
@@ -59,6 +61,26 @@ if (isset($_GET['parking']) && $_GET['parking'] != '') {
     // ciclo l'array degli hotel per cercare gli hotel che rientrano nel filtro scelto
     foreach ($hotels as $hotel) {
         if ($hotel['parking'] == $parking) {
+
+            // se l'hotel ha il parcheggio, lo inserisco in un array temporanea
+            $temp_hotels[] = $hotel;
+        }
+    }
+
+    // riempio l'array degli hotel filtrati con il contenuto dell'array temporanea
+    $filtered_hotels = $temp_hotels;
+}
+if (isset($_GET['vote']) && $_GET['vote'] != '') {
+
+    // svuoto l'array degli hotel temporanei
+    $temp_hotels = [];
+
+    // assegno alla variabile vote il valore del filtro scelto
+    $vote = $_GET['vote'];
+
+    // ciclo l'array degli hotel temporanei per cercare gli hotel che hanno valutazione maggiore o uguale al filtro scelto
+    foreach ($filtered_hotels as $hotel) {
+        if ($hotel['vote'] >= $vote) {
 
             // se l'hotel ha il parcheggio, lo inserisco in un array temporanea
             $temp_hotels[] = $hotel;
@@ -88,12 +110,22 @@ if (isset($_GET['parking']) && $_GET['parking'] != '') {
             <div class="row">
                 <div class="col-12">
                     <form action="index.php" method="get">
+                        <h3>Filtri:</h3>
                         <div class="row">
                             <div class="col-5 my-3">
                                 <select class="form-select form-select-sm" name="parking" id="parking">
-                                    <option value="">Filtro Hotel con parcheggi OFF</option>
-                                    <option value="true" <?php echo ($parking == 'true') ? 'selected' : ''; ?>>Filtro Hotel con parcheggi ON</option>
-                                    <!-- <option value="false" <?php echo ($parking == 'false') ? 'selected' : ''; ?>>No</option> -->
+                                    <option value="">Filtra Hotel con parcheggi OFF</option>
+                                    <option value="true" <?php echo ($parking == 'true') ? 'selected' : ''; ?>>Filtra Hotel con parcheggi ON</option>
+                                </select>
+                            </div>
+                            <div class="col-5 my-3">
+                                <select class="form-select form-select-sm" name="vote" id="vote">
+                                    <option value="">Filtra Hotel per voto</option>
+                                    <option value="1" <?php echo ($vote == '1') ? 'selected' : ''; ?>>voto 1 e superiori</option>
+                                    <option value="2" <?php echo ($vote == '2') ? 'selected' : ''; ?>>voto 2 e superiori</option>
+                                    <option value="3" <?php echo ($vote == '3') ? 'selected' : ''; ?>>voto 3 e superiori</option>
+                                    <option value="4" <?php echo ($vote == '4') ? 'selected' : ''; ?>>voto 4 e superiori</option>
+                                    <option value="5" <?php echo ($vote == '5') ? 'selected' : ''; ?>>voto 5</option>
                                 </select>
                             </div>
                             <div class="col-2 pt-3">
@@ -101,7 +133,7 @@ if (isset($_GET['parking']) && $_GET['parking'] != '') {
                             </div>
                         </div>
                     </form>
-                    <table class="table table-dark table-striped">
+                    <table class="table table-dark table-striped mt-2">
                         <thead>
                             <tr>
                                 <th>Nome</th>
