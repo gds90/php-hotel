@@ -37,8 +37,6 @@ $hotels = [
     ]
 ];
 
-// dichiaro la variabile parking vuota per evitare errori nella visualizzazione della select
-$parking = '';
 
 // dichiaro la variabile vote vuota per evitare errori nella visualizzazione della select
 $vote = '';
@@ -55,11 +53,15 @@ if (isset($_GET['parking']) && $_GET['parking'] != '') {
     // assegno alla variabile parking il valore del filtro scelto
     $parking = $_GET['parking'];
 
+    // // converto la stringa del select in valore booleano
+    // $parking = filter_var($parking, FILTER_VALIDATE_BOOL);
+
     // svuoto l'array degli hotel filtrati per evitare doppioni nella tabella
     $filtered_hotels = [];
 
     // ciclo l'array degli hotel per cercare gli hotel che rientrano nel filtro scelto
     foreach ($hotels as $hotel) {
+
         if ($hotel['parking'] == $parking) {
 
             // se l'hotel ha il parcheggio, lo inserisco in un array temporanea
@@ -114,8 +116,9 @@ if (isset($_GET['vote']) && $_GET['vote'] != '') {
                         <div class="row">
                             <div class="col-5 my-3">
                                 <select class="form-select form-select-sm" name="parking" id="parking">
-                                    <option value="">Filtra Hotel con parcheggi OFF</option>
-                                    <option value="true" <?php echo ($parking == 'true') ? 'selected' : ''; ?>>Filtra Hotel con parcheggi ON</option>
+                                    <option value="">Filtra Hotel con o senza parcheggio</option>
+                                    <option value="1" <?php echo (isset($_GET['parking']) && $parking == 1) ? 'selected' : ''; ?>>Filtra Hotel con parcheggio disponibile</option>
+                                    <option value="0" <?php echo (isset($_GET['parking']) && $parking == 0) ? 'selected' : ''; ?>>Filtra Hotel con parcheggio non disponibile</option>
                                 </select>
                             </div>
                             <div class="col-5 my-3">
