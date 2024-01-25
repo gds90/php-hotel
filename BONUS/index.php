@@ -36,6 +36,38 @@ $hotels = [
         'distance_to_center' => 50
     ]
 ];
+
+// dichiaro la variabile parking vuota per evitare errori nella visualizzazione della select
+$parking = '';
+
+
+// dichiaro una variabile filtered_hotels a cui associo i valori dell'array hotels per evitare errori nella visualizzazione della tabella;
+$filtered_hotels = $hotels;
+
+// controllo se è stato selezionato un filtro per gli hotel con parcheggio
+if (isset($_GET['parking']) && $_GET['parking'] != '') {
+
+    // dichiaro un'array vuoto che mi servirà nel filtraggio degli hotel
+    $temp_hotels = [];
+
+    // assegno alla variabile parking il valore del filtro scelto
+    $parking = $_GET['parking'];
+
+    // svuoto l'array degli hotel filtrati per evitare doppioni nella tabella
+    $filtered_hotels = [];
+
+    // ciclo l'array degli hotel per cercare gli hotel che rientrano nel filtro scelto
+    foreach ($hotels as $hotel) {
+        if ($hotel['parking'] == $parking) {
+
+            // se l'hotel ha il parcheggio, lo inserisco in un array temporanea
+            $temp_hotels[] = $hotel;
+        }
+    }
+
+    // riempio l'array degli hotel filtrati con il contenuto dell'array temporanea
+    $filtered_hotels = $temp_hotels;
+}
 ?>
 
 <!DOCTYPE html>
@@ -50,10 +82,25 @@ $hotels = [
 
 <body>
     <?php include_once __DIR__ . "/partials/templates/header.php"; ?>
+
     <main class="bg-body-tertiary py-5">
         <div class="container">
             <div class="row">
                 <div class="col-12">
+                    <form action="index.php" method="get">
+                        <div class="row">
+                            <div class="col-5 my-3">
+                                <select class="form-select form-select-sm" name="parking" id="parking">
+                                    <option value="">Filtro Hotel con parcheggi OFF</option>
+                                    <option value="true" <?php echo ($parking == 'true') ? 'selected' : ''; ?>>Filtro Hotel con parcheggi ON</option>
+                                    <!-- <option value="false" <?php echo ($parking == 'false') ? 'selected' : ''; ?>>No</option> -->
+                                </select>
+                            </div>
+                            <div class="col-2 pt-3">
+                                <button class="btn btn-success btn-sm" type="submit">Filtra</button>
+                            </div>
+                        </div>
+                    </form>
                     <table class="table table-dark table-striped">
                         <thead>
                             <tr>
@@ -65,7 +112,7 @@ $hotels = [
                             </tr>
                         </thead>
                         <tbody>
-                            <?php foreach ($hotels as $hotel) { ?>
+                            <?php foreach ($filtered_hotels as $hotel) { ?>
                                 <tr>
                                     <td>
                                         <?php echo $hotel['name'] ?>
