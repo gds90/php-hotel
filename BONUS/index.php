@@ -84,7 +84,7 @@ if (isset($_GET['vote']) && $_GET['vote'] != '') {
     foreach ($filtered_hotels as $hotel) {
         if ($hotel['vote'] >= $vote) {
 
-            // se l'hotel ha il parcheggio, lo inserisco in un array temporanea
+            // se l'hotel ha un voto maggiore/uguale, lo inserisco in un array temporanea
             $temp_hotels[] = $hotel;
         }
     }
