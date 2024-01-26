@@ -156,11 +156,7 @@ if (isset($_GET['vote']) && $_GET['vote'] != '') {
                                         <?php echo $hotel['description'] ?>
                                     </td>
                                     <td>
-                                        <?php if ($hotel['parking']) {
-                                            echo "Parcheggio disponibile: Sì";
-                                        } else {
-                                            echo "Parcheggio disponibile: No";
-                                        } ?>
+                                        <?php echo ($hotel['parking']) ? 'Parcheggio disponibile: Sì' : 'Parcheggio disponibile: No'; ?>
                                     </td>
                                     <td>
                                         <?php echo $hotel['vote'] ?>
